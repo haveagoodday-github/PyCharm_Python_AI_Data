@@ -25,7 +25,6 @@ import pymysql
 global_username = "root"
 global_password = "root"
 global_db = "photoworldForPython"  # 数据库名称
-global_table_name = "PageForImage"
 
 class SpiderNameSpider(scrapy.Spider):
     text_color = '\33[96m'
@@ -40,7 +39,7 @@ class SpiderNameSpider(scrapy.Spider):
         global global_username
         global global_password
         global global_db
-        self.model = MySQLDatabase(user=global_username, password=global_password, db=global_db)
+        self.model = MySQLDatabase(user=global_username, password=global_password, db=global_db, table_name='PageForImage')
 
     def parse(self, response):
         page_max_num = int(response.xpath('//div[@class="nav-links"]/a/text()').getall()[-2])
@@ -108,7 +107,7 @@ class MySQLDatabase:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, user, password, host='localhost', port=3306, db=None):
+    def __init__(self, user, password, table_name, host='localhost', port=3306, db=None):
         if not hasattr(self, 'connect'):
             self.user = user
             self.password = password
@@ -116,6 +115,7 @@ class MySQLDatabase:
             self.port = port
             self.db = db
             self.connect = None
+            self.table_name = table_name
             self.connect_database()  # 在初始化时自动执行连接操作
 
     def connect_database(self):
@@ -139,7 +139,6 @@ class MySQLDatabase:
             self.connect.close()
 
     def insert_data(self, data: dict):
-        global global_table_name
         if not self.connect:
             self.connect_database()
         try:
@@ -154,7 +153,7 @@ class MySQLDatabase:
             detailsURL = data['link']
 
             sql = f'''
-                INSERT INTO {global_table_name} (title, imgURL, content, tags, time, type, author, detailsURL)
+                INSERT INTO {self.table_name} (title, imgURL, content, tags, time, type, author, detailsURL)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
             '''
             db.execute(sql, (title, imgURL, content, tags, time, type, author, detailsURL))
@@ -166,15 +165,15 @@ class MySQLDatabase:
             raise Exception("Inset Data To Database Error:", e)
 
     def create_table(self):
-        global global_table_name
+
         try:
             db = self.connect.cursor(pymysql.cursors.DictCursor)
-            db.execute(f"SHOW TABLES LIKE '{global_table_name}'")
+            db.execute(f"SHOW TABLES LIKE '{self.table_name}'")
             result = db.fetchone()
 
             if not result:  # 如果表不存在，则创建表
                 sql = f'''
-                CREATE TABLE `{global_table_name}` (
+                CREATE TABLE `{self.table_name}` (
                   `id` int NOT NULL AUTO_INCREMENT,
                   `title` varchar(255) DEFAULT NULL,
                   `imgURL` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
@@ -196,10 +195,9 @@ class MySQLDatabase:
         pass
 
     def search_by_title(self, title):
-        global global_table_name
         try:
             db = self.connect.cursor(pymysql.cursors.DictCursor)
-            sql = f"SELECT * FROM {global_table_name} WHERE title LIKE '%{title}%'"
+            sql = f"SELECT * FROM {self.table_name} WHERE title LIKE '%{title}%'"
             db.execute(sql)
             result = db.fetchall()
             return result

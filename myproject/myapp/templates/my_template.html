@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo World</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    button {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    p {
+        color: #666;
+    }
+
+    .result-item {
+        text-decoration: none;
+        color: #333;
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .result-item:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-item img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-top: 10px;
+        max-height: 200px; /* 添加限制图片最大高度的属性 */
+        border-radius: 10px;
+    }
+
+
+    hr {
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 250px; /* 控制搜索框宽度 */
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* 添加过渡效果 */
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .delete-button {
+    color: red;
+    text-decoration: none;
+    margin-top: 5px;
+    display: block;
+}
+
+.delete-button:hover {
+    text-decoration: underline;
+}
+
+
+</style>
+
+<body>
+    <div class="title">
+        <h1>Hello, Photo World!</h1>
+        <h4>开发者：吕海锋、廖展志</h4>
+    </div>
+    <form method="post" action="{% url 'search_results' %}">
+        {% csrf_token %} <!-- 添加这行来包含 CSRF 令牌 -->
+        <input type="text" name="search_query">
+        <button type="submit">搜索</button>
+    </form>
+    <p>搜索结果数量：{{ result_length }}</p>
+    {% for item in result %}
+    <a href="{{ item.detailsURL }}" class="result-item">
+        <div>
+            <h2>{{ item.id }}</h2>
+            <h2>{{ item.title }}</h2>
+            <p>Author: {{ item.author }}</p>
+            <p>Content: {{ item.content }}</p>
+            <img src="{{ item.imgURL }}">
+            <hr style="clear:both;">
+        </div>
+    </a>
+    {% endfor %}
+</body>
+</html>
