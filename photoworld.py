@@ -25,6 +25,7 @@ import pymysql
 global_username = "root"
 global_password = "root"
 global_db = "photoworldForPython"  # 数据库名称
+global_table_name = "PageForImage"
 
 class SpiderNameSpider(scrapy.Spider):
     text_color = '\33[96m'
@@ -39,7 +40,8 @@ class SpiderNameSpider(scrapy.Spider):
         global global_username
         global global_password
         global global_db
-        self.model = MySQLDatabase(user=global_username, password=global_password, db=global_db, table_name='PageForImage')
+        global global_table_name
+        self.model = MySQLDatabase(user=global_username, password=global_password, db=global_db, table_name=global_table_name)
 
     def parse(self, response):
         page_max_num = int(response.xpath('//div[@class="nav-links"]/a/text()').getall()[-2])
