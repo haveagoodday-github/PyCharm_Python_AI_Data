@@ -27,6 +27,7 @@ global_password = "root"
 global_db = "photoworldForPython"  # 数据库名称
 global_table_name = "PageForImage"
 
+
 class SpiderNameSpider(scrapy.Spider):
     text_color = '\33[96m'
     name = 'photoworld'
