@@ -1,7 +1,18 @@
 """
 1、导入依赖
-    pip install scrapy pymysql
-2、scrapy 使用方法
+    pip install scrapy pymysql django mysqlclient
+2、Django 使用方法
+    创建Django项目
+        django-admin startproject myproject
+    创建应用程序
+        python manage.py startapp myapp
+    创建模型
+        python manage.py makemigrations
+        python manage.py migrate
+    运行开发服务器
+        cd myproject
+        python manage.py runserver
+3、scrapy 使用方法
     scrapy startproject photoworldProject
     scrapy genspider photoworld https://www.photoworld.com.cn/category/images
     scrapy runspider photoworld.py
