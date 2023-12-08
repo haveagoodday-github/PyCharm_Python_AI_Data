@@ -123,6 +123,14 @@
         <input type="text" name="search_query">
         <button type="submit">搜索</button>
     </form>
+
+    <form method="post" action="{% url 'search_results_for_tags' %}">
+        {% csrf_token %} <!-- 添加这行来包含 CSRF 令牌 -->
+        <input type="text" name="search_query_for_tags">
+        <button type="submit">搜索</button>
+    </form>
+
+
     <p>搜索结果数量：{{ result_length }}</p>
     {% for item in result %}
     <a href="{{ item.detailsURL }}" class="result-item">
