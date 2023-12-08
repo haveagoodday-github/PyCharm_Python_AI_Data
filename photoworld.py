@@ -21,6 +21,7 @@
 
 import scrapy
 import pymysql
+import time
 
 # 数据库信息
 global_username = "root"

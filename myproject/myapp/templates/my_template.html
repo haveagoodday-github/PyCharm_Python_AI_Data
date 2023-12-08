@@ -126,7 +126,13 @@
 
     <form method="post" action="{% url 'search_results_for_tags' %}">
         {% csrf_token %} <!-- 添加这行来包含 CSRF 令牌 -->
-        <input type="text" name="search_query_for_tags">
+        <input type="text" name="search_query_for_tags" placeholder="输入标签名搜索">
+        <button type="submit">搜索</button>
+    </form>
+
+    <form method="post" action="{% url 'search_results_for_author' %}">
+        {% csrf_token %} <!-- 添加这行来包含 CSRF 令牌 -->
+        <input type="text" name="search_query_for_author" placeholder="输入作者名搜索">
         <button type="submit">搜索</button>
     </form>
 
