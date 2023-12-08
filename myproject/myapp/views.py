@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import pymysql
 
+
 def my_view(request):
     sql = MySQLDatabase2(user='root', password='root', table_name='PageForImage', db='photoworldForPython')
     if request.method == 'POST':
@@ -15,22 +16,20 @@ def search_by_bags(request):
     sql = MySQLDatabase2(user='root', password='root', table_name='PageForImage', db='photoworldForPython')
     if request.method == 'POST':
         search_query = request.POST.get('search_query_for_tags')  # 获取输入框的内容
-        result = sql.search_by_bag(title=search_query)
+        result = sql.search_by_bag(bag=search_query)
         result_length = len(result)
         return render(request, 'my_template.html', {'result': result, 'result_length': result_length})
     return render(request, 'my_template.html', {'result': [], 'result_length': 0})
+
 
 def search_by_author(request):
     sql = MySQLDatabase2(user='root', password='root', table_name='PageForImage', db='photoworldForPython')
     if request.method == 'POST':
         search_query = request.POST.get('search_query_for_author')  # 获取输入框的内容
-        result = sql.search_by_author(title=search_query)
+        result = sql.search_by_author(author=search_query)
         result_length = len(result)
         return render(request, 'my_template.html', {'result': result, 'result_length': result_length})
     return render(request, 'my_template.html', {'result': [], 'result_length': 0})
-
-
-
 
 
 class MySQLDatabase2:
@@ -147,3 +146,13 @@ class MySQLDatabase2:
             return result
         except Exception as e:
             raise Exception(f"Search by Tag Error: {e}")
+
+    def search_by_author(self, author):
+        try:
+            db = self.connect.cursor(pymysql.cursors.DictCursor)
+            sql = f"SELECT * FROM {self.table_name} WHERE author LIKE '%{author}%'"
+            db.execute(sql)
+            result = db.fetchall()
+            return result
+        except Exception as e:
+            raise Exception(f"Search by Author Error: {e}")

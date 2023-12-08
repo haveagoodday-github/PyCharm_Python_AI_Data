@@ -120,7 +120,7 @@
     </div>
     <form method="post" action="{% url 'search_results' %}">
         {% csrf_token %} <!-- 添加这行来包含 CSRF 令牌 -->
-        <input type="text" name="search_query">
+        <input type="text" name="search_query" placeholder="输入标题名称搜索">
         <button type="submit">搜索</button>
     </form>
 
@@ -143,6 +143,7 @@
         <div>
             <h2>{{ item.id }}</h2>
             <h2>{{ item.title }}</h2>
+            <p>Tag: {{ item.tags }}</p>
             <p>Author: {{ item.author }}</p>
             <p>Content: {{ item.content }}</p>
             <img src="{{ item.imgURL }}">

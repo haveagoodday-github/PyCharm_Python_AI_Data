@@ -29,7 +29,6 @@ global_password = "root"
 # TODO: create database photoworldForPython
 global_db = "photoworldForPython"  # 数据库名称
 global_table_name = "PageForImage"
-global_wait_time = 1_000_000_000
 
 class SpiderNameSpider(scrapy.Spider):
     text_color = '\33[96m'
@@ -90,8 +89,7 @@ class SpiderNameSpider(scrapy.Spider):
             }
             self.save_to_database(data)
             # yield scrapy.Request(url=link, callback=self.content_detailed)
-        global global_wait_time
-        time.sleep(global_wait_time)
+        time.sleep(1)
         pass
 
     def content_detailed(self, response):
