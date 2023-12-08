@@ -1,4 +1,5 @@
 """
+‼️ In case you're using Python 3.6 or an earlier version, stick with 13.8.6 ‼️
 1、导入依赖
     pip install scrapy pymysql django mysqlclient
 2、Django 使用方法
@@ -24,9 +25,10 @@ import pymysql
 # 数据库信息
 global_username = "root"
 global_password = "root"
+# TODO: create database photoworldForPython
 global_db = "photoworldForPython"  # 数据库名称
 global_table_name = "PageForImage"
-
+global_wait_time = 1_000_000_000
 
 class SpiderNameSpider(scrapy.Spider):
     text_color = '\33[96m'
@@ -87,7 +89,8 @@ class SpiderNameSpider(scrapy.Spider):
             }
             self.save_to_database(data)
             # yield scrapy.Request(url=link, callback=self.content_detailed)
-
+        global global_wait_time
+        time.sleep(global_wait_time)
         pass
 
     def content_detailed(self, response):
